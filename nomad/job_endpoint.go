@@ -1850,6 +1850,10 @@ func validateJobUpdate(old, new *structs.Job) error {
 		return fmt.Errorf("field 'ParentID' is read-only")
 	}
 
+	if new.Payload != nil {
+		new.Payload = snappy.Encode(nil, new.Payload)
+	}
+
 	return nil
 }
 
