@@ -267,7 +267,7 @@ func (jobValidate) Validate(job *structs.Job) (warnings []error, err error) {
 		multierror.Append(validationErrors, fmt.Errorf("job type cannot be core"))
 	}
 
-	if len(job.Payload) != 0 {
+	if !job.Dispatched && len(job.Payload) != 0 {
 		multierror.Append(validationErrors, fmt.Errorf("job can't be submitted with a payload, only dispatched"))
 	}
 
