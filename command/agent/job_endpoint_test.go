@@ -2763,6 +2763,7 @@ func TestJobs_ApiJobToStructsJob(t *testing.T) {
 		Namespace:      "foo",
 		VaultNamespace: "ghi789",
 		ID:             "foo",
+		ParentID:       "lol",
 		Name:           "name",
 		Type:           "service",
 		Priority:       50,
@@ -3282,6 +3283,7 @@ func TestJobs_ApiJobToStructsJob(t *testing.T) {
 		Region:      "global",
 		Namespace:   "foo",
 		ID:          "foo",
+		ParentID:    "lol",
 		Name:        "name",
 		Type:        "system",
 		Priority:    50,
@@ -3473,6 +3475,20 @@ func TestJobs_ApiJobToStructsJobUpdate(t *testing.T) {
 	require.Equal(t, jobUpdate, structsJob.Update)
 	require.Equal(t, group1, *structsJob.TaskGroups[0].Update)
 	require.Equal(t, group2, *structsJob.TaskGroups[1].Update)
+}
+
+func TestJobs_ApiJobToStructsJobDispatched(t *testing.T) {
+	t.Parallel()
+
+	apiJob := &api.Job{
+		Dispatched: true,
+		ParentID: helper.StringToPtr("1234"),
+	}
+
+	structsJob := ApiJobToStructJob(apiJob)
+
+	require.Equal(t, true, structsJob.Dispatched)
+	require.Equal(t, "1234", structsJob.ParentID)
 }
 
 // TestJobs_Matching_Resources asserts:
